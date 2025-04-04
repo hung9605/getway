@@ -1,17 +1,30 @@
 spring:
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':  # Apply to all routes
+            allowedOrigins:
+              - "http://localhost:4200"
+            allowedMethods:
+              - POST
+              - GET
+              - PUT
+              - DELETE
+              - OPTIONS  # Required for pre-flight requests
+            allowedHeaders: "*"
+            allowCredentials: true  # If using cookies/auth
+            maxAge: 3600
       routes:
         - id: example_route
           uri: http://127.0.0.1:8085
           predicates:
             - Path=/api/**
-          #filters:
-           # - RewritePath=/menu/list, /api/menu/list
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG  # Enable detailed logging for Spring Cloud Gateway
     org.springframework.web: DEBUG  # Enable detailed logging for HTTP requests/responses
+    org.springframework.http: DEBUG
     root: INFO  # Default log level
 server:
   port: 8095
